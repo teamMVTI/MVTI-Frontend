@@ -7,7 +7,10 @@ const IntroContainer = () => {
   const [villains, setVillains] = useState([]);
   useEffect(() => {
     if (villains.length == 0) {
-      req("/api/character/", "get", (res) => setVillains(res.data));
+      req("/api/character/", "get", (res) => {
+        console.log(res.data);
+        setVillains(res.data);
+      });
     }
   }, [villains]);
   return (

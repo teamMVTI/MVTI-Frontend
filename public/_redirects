@@ -1,3 +1,2 @@
-/              /
-/introduce  /introduce
-/api/*  https://mvti-backend.herokuapp.com  200
+/api/*  https://mvti-backend.herokuapp.com/api/:splat  200!
+/*  /index.html 200
