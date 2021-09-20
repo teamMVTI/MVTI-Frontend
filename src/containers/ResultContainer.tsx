@@ -23,8 +23,8 @@ const ResultContainer = ({ history }: ResultContainerProps) => {
   const copy = () => {
     const tmp = document.createElement("textarea");
     document.body.appendChild(tmp);
-    // tmp.value = "http://elice-kdt-ai-track-vm-da-05.koreacentral.cloudapp.azure.com";
-    tmp.value = "http://localhost:3000";
+    tmp.value =
+      process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://mvti.netlify.app/";
     tmp.select();
     document.execCommand("copy");
     document.body.removeChild(tmp);

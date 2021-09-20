@@ -48,7 +48,7 @@ const ProfileCard = ({ name, imgurl }: ProfileCardProps) => {
             className='MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary'
           >
             <span className='MuiButton-label'>자세히 보기 🔍</span>
-            <span className='MuiTouchRipple-root'></span>
+            <span className='MuiTouchRipple-root' />
           </Link>
         </Button>
       </CardActions>
