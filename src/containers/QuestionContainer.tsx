@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { RouteComponentProps, withRouter, Redirect } from "react-router";
-
-import axios from "axios";
+import { RouteComponentProps, withRouter } from "react-router";
 import { Grid, Button } from "@material-ui/core";
 
 import Loading from "../components/sentiment_test/Loading";
 import QuestionHeader from "../components/sentiment_test/QuestionHeader";
 import ProgressBar from "../components/sentiment_test/ProgressBar";
-import type { question } from "../data/QuestionList";
 import questionList from "../data/QuestionList";
+import { req } from "../lib/axios";
 
 type QuestionContainerProps = RouteComponentProps;
 
@@ -20,26 +18,22 @@ const QuestionContainer = ({ history }: QuestionContainerProps) => {
   useEffect(() => {
     if (results.length === 10) {
       const data = { words: results };
-      axios({
-        method: "post",
-        url: "http://127.0.0.1:8000/api/sentiment/",
-        data,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "*",
-          "Access-Control-Max-Age": 86400,
+      req(
+        "/api/sentiment/",
+        "post",
+        (res) => {
+          const data = [res.data];
+          sessionStorage.setItem("data", JSON.stringify(data));
+          history.push("/result");
         },
-      }).then((res) => {
-        console.log("전송 성공");
-        const data = [res.data];
-        sessionStorage.setItem("data", JSON.stringify(data));
-        console.log("보냈다!");
-        history.push("/result");
-      });
+        undefined,
+        {
+          data,
+        },
+      );
     }
   }, [results.length]);
+
   const changeQuestion = async (type: string) => {
     currentId.current += 1;
     setQuestion(questionList["questionList"][currentId.current]);
@@ -49,7 +43,7 @@ const QuestionContainer = ({ history }: QuestionContainerProps) => {
   const addResults = (type: string) => {
     setResults([...results, type]);
   };
-  console.log(results);
+
   const sentenceItems =
     currentId.current >= 10
       ? []

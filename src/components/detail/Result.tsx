@@ -65,7 +65,8 @@ const Result = ({ url, sdata, udata, type }: ResultProps) => {
       },
     ],
   };
-  console.log(tdata);
+  // console.log(tdata);
+  // console.log(sdata);
   return (
     <>
       <Grid item xs={12}>

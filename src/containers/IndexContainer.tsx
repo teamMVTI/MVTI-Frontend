@@ -52,8 +52,8 @@ const IndexContainer = ({ history }: IndexContainerProps) => {
         </Button>
       </Grid>
       <Grid item>
-        <Button variant='contained' color='primary' onClick={() => setOpen(true)}>
-          전 착한 사람인데요?
+        <Button variant='contained' color='primary' onClick={() => history.push("/introduce")}>
+          MVTI 사용설명서
         </Button>
         <Modal
           open={open}

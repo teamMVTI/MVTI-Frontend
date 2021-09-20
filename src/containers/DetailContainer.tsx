@@ -6,24 +6,9 @@ import Profile from "../components/detail/Profile";
 import Result from "../components/detail/Result";
 import Counter from "../components/sentiment_test/Counter";
 import VillainRelation from "../components/sentiment_test/VillainRelation";
+import { req } from "../lib/axios";
 
-type DetailContainerProps = {};
-
-axios.defaults.headers["Access-Control-Allow-Origin"] = "*";
-
-const getVillains = (name: string) =>
-  axios({
-    method: "get",
-    url: `http://127.0.0.1:8000/api/character/${name}`,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type",
-      "Access-Control-Max-Age": 86400,
-    },
-  });
-
-const DetailContainer = ({}: DetailContainerProps) => {
+const DetailContainer = () => {
   const path = useLocation().pathname.split("/");
   const cname = path[path.length - 1];
   const [villain, setVillain] = useState<any>({
@@ -36,21 +21,21 @@ const DetailContainer = ({}: DetailContainerProps) => {
     mvti_type: "",
     partner: "",
     rival: "",
-    sentiment: [],
+    sentiment: `[]`,
   });
 
   const { name, wc_url, best_talk, character_img_url, mvti_type, partner, rival, sentiment, count } = villain;
 
-  const arr = Object.keys(sentiment).sort();
-  const sdata = arr.map((v: string) => {
-    console.log(v);
-    return Math.round(Number(sentiment[v]) * 10);
-  });
+  const sdata = Object.entries(sentiment)
+    .sort(([a], [b]) => {
+      if (a < b) return -1;
+      else return 1;
+    })
+    .map(([, val]) => Math.round(Number(val) * 10));
 
   useEffect(() => {
-    getVillains(cname).then((res) => {
-      // console.log(res.data);
-      setVillain(res.data);
+    req(`/api/character/${cname}`, "get", (res) => {
+      setVillain({ ...res.data, sentiment: JSON.parse(res.data.sentiment.replace(/'/g, '"')) });
     });
   }, []);
 
